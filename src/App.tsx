@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, Navigate, Route, Routes } from 'react-router-dom'
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import './App.css'
 
 type BackgroundVariant = 'breathing' | 'fade-relocate' | 'slow-drift' | 'drift-breathing'
@@ -129,6 +129,11 @@ function ExamplePage({ variant }: { variant: BackgroundVariant }) {
 
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const location = useLocation()
+  const currentPageLabel =
+    location.pathname === '/'
+      ? 'Home'
+      : (examplePages.find((page) => page.path === location.pathname)?.label ?? 'Home')
 
   const closeDrawer = () => setIsDrawerOpen(false)
 
@@ -144,6 +149,24 @@ function App() {
       >
         <MenuIcon />
       </button>
+
+      <div
+        aria-live="polite"
+        style={{
+          position: 'fixed',
+          top: '30px',
+          left: '80px',
+          zIndex: 34,
+          color: '#f8fafc',
+          fontSize: '16px',
+          fontWeight: 600,
+          lineHeight: 1.25,
+          pointerEvents: 'none',
+          userSelect: 'none',
+        }}
+      >
+        {currentPageLabel}
+      </div>
 
       <aside
         id="navigation-drawer"
