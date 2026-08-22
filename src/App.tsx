@@ -1,51 +1,91 @@
-import { Link, Navigate, Route, Routes } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import './App.css'
 
 const examplePages = [
-  { label: 'Example 1', path: '/example-1' },
-  { label: 'Example 2', path: '/example-2' },
-  { label: 'Example 3', path: '/example-3' },
+  { label: 'Example 1', path: '/example-1', background: 'bg-example-1' },
+  { label: 'Example 2', path: '/example-2', background: 'bg-example-2' },
+  { label: 'Example 3', path: '/example-3', background: 'bg-example-3' },
 ]
 
-function HomePage() {
+function MenuIcon() {
   return (
-    <main className="page">
-      <section className="card">
-        <p className="eyebrow">Background</p>
-        <h1>Home</h1>
-        <nav className="link-stack" aria-label="Example pages">
+    <span className="menu-icon" aria-hidden="true">
+      <span />
+      <span />
+      <span />
+    </span>
+  )
+}
+
+function Shell({ pathname }: { pathname: string }) {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  const match = examplePages.find((page) => page.path === pathname)
+  const backgroundClass = match?.background ?? 'bg-home'
+
+  return (
+    <div className={`app-shell ${backgroundClass}`}>
+      <button
+        type="button"
+        className="menu-button"
+        aria-label={isDrawerOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={isDrawerOpen}
+        aria-controls="example-drawer"
+        onClick={() => setIsDrawerOpen((current) => !current)}
+      >
+        <MenuIcon />
+      </button>
+
+      <aside
+        id="example-drawer"
+        className={`drawer ${isDrawerOpen ? 'drawer-open' : ''}`}
+        aria-hidden={!isDrawerOpen}
+      >
+        <nav className="drawer-nav" aria-label="Examples">
           {examplePages.map((page) => (
-            <Link key={page.path} className="nav-link" to={page.path}>
+            <Link
+              key={page.path}
+              className="drawer-link"
+              to={page.path}
+              onClick={() => setIsDrawerOpen(false)}
+            >
               {page.label}
             </Link>
           ))}
         </nav>
-      </section>
-    </main>
-  )
-}
+      </aside>
 
-function ExamplePage({ label }: { label: string }) {
-  return (
-    <main className="page">
-      <section className="card">
-        <Link className="home-link" to="/">
-          Home
-        </Link>
-        <h1>{label}</h1>
-        <p className="subtle">This page is intentionally empty for now.</p>
-      </section>
-    </main>
+      <button
+        type="button"
+        className={`drawer-backdrop ${isDrawerOpen ? 'visible' : ''}`}
+        aria-label="Close menu"
+        tabIndex={-1}
+        onClick={() => setIsDrawerOpen(false)}
+      />
+    </div>
   )
 }
 
 function App() {
+  const location = useLocation()
+  const shellKey = location.pathname
+
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/example-1" element={<ExamplePage label="Example 1" />} />
-      <Route path="/example-2" element={<ExamplePage label="Example 2" />} />
-      <Route path="/example-3" element={<ExamplePage label="Example 3" />} />
+      <Route path="/" element={<Shell key={shellKey} pathname={location.pathname} />} />
+      <Route
+        path="/example-1"
+        element={<Shell key={shellKey} pathname={location.pathname} />}
+      />
+      <Route
+        path="/example-2"
+        element={<Shell key={shellKey} pathname={location.pathname} />}
+      />
+      <Route
+        path="/example-3"
+        element={<Shell key={shellKey} pathname={location.pathname} />}
+      />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

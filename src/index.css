@@ -5,9 +5,7 @@
   line-height: 1.5;
   font-weight: 400;
   color: #f8fafc;
-  background:
-    radial-gradient(circle at top, rgba(37, 99, 235, 0.35), transparent 35%),
-    linear-gradient(180deg, #020617 0%, #0f172a 100%);
+  background: #020617;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -29,13 +27,18 @@ body {
   min-height: 100vh;
 }
 
-a {
-  color: inherit;
-}
-
 button,
+a,
 input,
 textarea,
 select {
   font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+a {
+  color: inherit;
 }
