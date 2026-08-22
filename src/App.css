@@ -1,3 +1,8 @@
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+}
+
 .home-background {
   position: fixed;
   inset: 0;
@@ -12,4 +17,128 @@
       rgba(83, 245, 126, 0.38),
       transparent 72%
     );
+}
+
+.example-page {
+  --page-background: #020617;
+
+  position: fixed;
+  inset: 0;
+  background: var(--page-background);
+}
+
+.example-page--1 {
+  --page-background: #020617;
+}
+
+.example-page--2 {
+  --page-background: #020617;
+}
+
+.example-page--3 {
+  --page-background: #020617;
+}
+
+.menu-button {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  background: rgba(8, 15, 31, 0.72);
+  color: #f8fafc;
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+}
+
+.menu-button:focus-visible,
+.drawer-link:focus-visible {
+  outline: 2px solid rgba(248, 250, 252, 0.8);
+  outline-offset: 2px;
+}
+
+.menu-icon {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.menu-icon span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  width: min(84vw, 320px);
+  height: 100dvh;
+  padding: 80px 16px 16px;
+  overflow: hidden;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(3, 7, 18, 0.94);
+  transform: translateX(-102%);
+  transition: transform 180ms ease;
+}
+
+.drawer-open {
+  transform: translateX(0);
+}
+
+.drawer-home {
+  flex: none;
+  margin-bottom: 12px;
+}
+
+.drawer-routes {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  align-content: start;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.drawer-link {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.7);
+  color: #f8fafc;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  padding: 0;
+  border: 0;
+  background: rgba(2, 6, 23, 0.36);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.drawer-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
 }
