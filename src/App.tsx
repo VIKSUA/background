@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import './App.css'
 
-type BackgroundVariant = 'breathing' | 'fade-relocate' | 'slow-drift' | 'drift-breathing'
+type BackgroundVariant = 'fade-relocate' | 'strong-breathing' | 'random-drift' | 'shape-morph'
 
 type BlobPosition = {
   x: number
@@ -14,10 +14,10 @@ const examplePages: Array<{
   path: string
   variant: BackgroundVariant
 }> = [
-  { label: 'Example 1', path: '/example-1', variant: 'breathing' },
-  { label: 'Example 2', path: '/example-2', variant: 'fade-relocate' },
-  { label: 'Example 3', path: '/example-3', variant: 'slow-drift' },
-  { label: 'Example 4', path: '/example-4', variant: 'drift-breathing' },
+  { label: 'Example 1', path: '/example-1', variant: 'fade-relocate' },
+  { label: 'Example 2', path: '/example-2', variant: 'strong-breathing' },
+  { label: 'Example 3', path: '/example-3', variant: 'random-drift' },
+  { label: 'Example 4', path: '/example-4', variant: 'shape-morph' },
 ]
 
 const initialBlobPositions: [BlobPosition, BlobPosition] = [
@@ -39,19 +39,23 @@ function distance(a: BlobPosition, b: BlobPosition) {
   return Math.hypot(a.x - b.x, a.y - b.y)
 }
 
-function randomPosition(): BlobPosition {
+function randomPosition(min = 8, max = 92): BlobPosition {
   return {
-    x: 10 + Math.random() * 80,
-    y: 10 + Math.random() * 80,
+    x: min + Math.random() * (max - min),
+    y: min + Math.random() * (max - min),
   }
 }
 
-function chooseRelocation(previous: BlobPosition, other: BlobPosition) {
-  const minimumFromPrevious = 28
-  const minimumFromOther = 36
-
+function choosePosition(
+  previous: BlobPosition,
+  other: BlobPosition,
+  minimumFromPrevious: number,
+  minimumFromOther: number,
+  min = 8,
+  max = 92,
+) {
   for (let attempt = 0; attempt < 40; attempt += 1) {
-    const candidate = randomPosition()
+    const candidate = randomPosition(min, max)
 
     if (
       distance(candidate, previous) >= minimumFromPrevious &&
@@ -62,12 +66,12 @@ function chooseRelocation(previous: BlobPosition, other: BlobPosition) {
   }
 
   const fallbackPositions: BlobPosition[] = [
-    { x: 18, y: 20 },
-    { x: 82, y: 20 },
-    { x: 18, y: 80 },
-    { x: 82, y: 80 },
-    { x: 50, y: 18 },
-    { x: 50, y: 82 },
+    { x: 14, y: 16 },
+    { x: 86, y: 18 },
+    { x: 16, y: 84 },
+    { x: 84, y: 82 },
+    { x: 50, y: 12 },
+    { x: 50, y: 88 },
   ]
 
   return (
@@ -79,44 +83,109 @@ function chooseRelocation(previous: BlobPosition, other: BlobPosition) {
   )
 }
 
-function BlobPair({ className }: { className: string }) {
-  return (
-    <div className={`example-page animated-background ${className}`}>
-      <div className="gradient-blob gradient-blob--a" />
-      <div className="gradient-blob gradient-blob--b" />
-    </div>
-  )
+function FadeRelocateBackground() {
+  const backgroundRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const element = backgroundRef.current
+    if (!element) return
+
+    const positions: [BlobPosition, BlobPosition] = [
+      { x: 72, y: 24 },
+      { x: 20, y: 76 },
+    ]
+    const timers: number[] = []
+    const alpha = [0.42, 0.38]
+    const fadeMs = [3600, 4400]
+
+    const schedule = (callback: () => void, delay: number) => {
+      const timer = window.setTimeout(callback, delay)
+      timers.push(timer)
+    }
+
+    const setAlpha = (index: 0 | 1, value: number) => {
+      element.style.setProperty(index === 0 ? '--a-alpha' : '--b-alpha', String(value))
+    }
+
+    const setPosition = (index: 0 | 1, position: BlobPosition) => {
+      element.style.setProperty(index === 0 ? '--a-x' : '--b-x', `${position.x}%`)
+      element.style.setProperty(index === 0 ? '--a-y' : '--b-y', `${position.y}%`)
+    }
+
+    const beginCycle = (index: 0 | 1, delayBeforeFade: number) => {
+      schedule(() => {
+        setAlpha(index, 0)
+
+        schedule(() => {
+          const otherIndex = index === 0 ? 1 : 0
+          const next = choosePosition(positions[index], positions[otherIndex], 30, 38)
+          positions[index] = next
+          setPosition(index, next)
+
+          schedule(() => {
+            setAlpha(index, alpha[index])
+            const hold = 4200 + Math.random() * 3200
+            beginCycle(index, fadeMs[index] + hold)
+          }, 120)
+        }, fadeMs[index])
+      }, delayBeforeFade)
+    }
+
+    setPosition(0, positions[0])
+    setPosition(1, positions[1])
+    setAlpha(0, alpha[0])
+    setAlpha(1, 0.035)
+
+    schedule(() => setAlpha(1, alpha[1]), 120)
+    beginCycle(0, 900)
+    beginCycle(1, 7600)
+
+    return () => timers.forEach((timer) => window.clearTimeout(timer))
+  }, [])
+
+  return <div ref={backgroundRef} className="example-page animated-background fade-relocate-background" />
 }
 
-function FadeRelocateBackground() {
-  const [positions, setPositions] = useState<[BlobPosition, BlobPosition]>(
-    initialBlobPositions,
-  )
+function RandomDriftBackground() {
+  const backgroundRef = useRef<HTMLDivElement>(null)
 
-  const relocate = (index: 0 | 1) => {
-    setPositions((current) => {
+  useEffect(() => {
+    const element = backgroundRef.current
+    if (!element) return
+
+    const positions: [BlobPosition, BlobPosition] = [
+      { x: 78, y: 18 },
+      { x: 18, y: 82 },
+    ]
+    const timers: number[] = []
+
+    const schedule = (callback: () => void, delay: number) => {
+      const timer = window.setTimeout(callback, delay)
+      timers.push(timer)
+    }
+
+    const setPosition = (index: 0 | 1, position: BlobPosition) => {
+      element.style.setProperty(index === 0 ? '--a-x' : '--b-x', `${position.x}%`)
+      element.style.setProperty(index === 0 ? '--a-y' : '--b-y', `${position.y}%`)
+    }
+
+    const move = (index: 0 | 1, duration: number) => {
       const otherIndex = index === 0 ? 1 : 0
-      const next = chooseRelocation(current[index], current[otherIndex])
-      const updated: [BlobPosition, BlobPosition] = [current[0], current[1]]
-      updated[index] = next
-      return updated
-    })
-  }
+      const next = choosePosition(positions[index], positions[otherIndex], 34, 28, 2, 98)
+      positions[index] = next
+      setPosition(index, next)
+      schedule(() => move(index, duration), duration)
+    }
 
-  return (
-    <div className="example-page animated-background fade-relocate-background">
-      <div
-        className="gradient-blob gradient-blob--a"
-        style={{ left: `${positions[0].x}%`, top: `${positions[0].y}%` }}
-        onAnimationIteration={() => relocate(0)}
-      />
-      <div
-        className="gradient-blob gradient-blob--b"
-        style={{ left: `${positions[1].x}%`, top: `${positions[1].y}%` }}
-        onAnimationIteration={() => relocate(1)}
-      />
-    </div>
-  )
+    setPosition(0, positions[0])
+    setPosition(1, positions[1])
+    schedule(() => move(0, 10500), 180)
+    schedule(() => move(1, 13800), 900)
+
+    return () => timers.forEach((timer) => window.clearTimeout(timer))
+  }, [])
+
+  return <div ref={backgroundRef} className="example-page animated-background random-drift-background" />
 }
 
 function ExamplePage({ variant }: { variant: BackgroundVariant }) {
@@ -124,7 +193,11 @@ function ExamplePage({ variant }: { variant: BackgroundVariant }) {
     return <FadeRelocateBackground />
   }
 
-  return <BlobPair className={`${variant}-background`} />
+  if (variant === 'random-drift') {
+    return <RandomDriftBackground />
+  }
+
+  return <div className={`example-page animated-background ${variant}-background`} />
 }
 
 function App() {

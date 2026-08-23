@@ -19,213 +19,206 @@
     );
 }
 
+@property --a-x {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 70%;
+}
+
+@property --a-y {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 22%;
+}
+
+@property --b-x {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 22%;
+}
+
+@property --b-y {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 72%;
+}
+
+@property --a-rx {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 42vw;
+}
+
+@property --a-ry {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 32vw;
+}
+
+@property --b-rx {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 38vw;
+}
+
+@property --b-ry {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 30vw;
+}
+
+@property --a-alpha {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0.42;
+}
+
+@property --b-alpha {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0.38;
+}
+
 .example-page {
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background: #020617;
+  background-color: #020617;
 }
 
 .animated-background {
-  isolation: isolate;
+  --a-x: 70%;
+  --a-y: 22%;
+  --b-x: 22%;
+  --b-y: 72%;
+  --a-rx: 42vw;
+  --a-ry: 32vw;
+  --b-rx: 38vw;
+  --b-ry: 30vw;
+  --a-alpha: 0.42;
+  --b-alpha: 0.38;
+
+  background-image:
+    radial-gradient(
+      ellipse var(--a-rx) var(--a-ry) at var(--a-x) var(--a-y),
+      rgb(83 245 126 / var(--a-alpha)),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse var(--b-rx) var(--b-ry) at var(--b-x) var(--b-y),
+      rgb(83 245 126 / var(--b-alpha)),
+      transparent 72%
+    );
 }
 
-.gradient-blob {
-  position: absolute;
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-
-.gradient-blob--a {
-  left: 70%;
-  top: 22%;
-  width: 84vw;
-  height: 64vw;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(83, 245, 126, 0.42),
-    transparent 72%
-  );
-}
-
-.gradient-blob--b {
-  left: 22%;
-  top: 72%;
-  width: 76vw;
-  height: 60vw;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(83, 245, 126, 0.38),
-    transparent 72%
-  );
-}
-
-.breathing-background .gradient-blob--a {
-  animation: breathe-a 16.4s ease-in-out -3.2s infinite;
-}
-
-.breathing-background .gradient-blob--b {
-  animation: breathe-b 19.7s ease-in-out -8.1s infinite;
-}
-
-.fade-relocate-background .gradient-blob {
+.fade-relocate-background {
   transition:
-    left 120ms linear,
-    top 120ms linear;
+    --a-alpha 3.6s ease-in-out,
+    --b-alpha 4.4s ease-in-out;
 }
 
-.fade-relocate-background .gradient-blob--a {
-  animation: fade-relocate-a 15.8s ease-in-out -2.4s infinite;
+.strong-breathing-background {
+  animation:
+    strong-breathe-a 8.6s ease-in-out -2.2s infinite,
+    strong-breathe-b 11.4s ease-in-out -7.6s infinite;
 }
 
-.fade-relocate-background .gradient-blob--b {
-  animation: fade-relocate-b 18.6s ease-in-out -9.3s infinite;
+.random-drift-background {
+  transition:
+    --a-x 10.5s ease-in-out,
+    --a-y 10.5s ease-in-out,
+    --b-x 13.8s ease-in-out,
+    --b-y 13.8s ease-in-out;
 }
 
-.slow-drift-background .gradient-blob--a {
-  animation: slow-drift-a 29s ease-in-out -7s infinite alternate;
+.shape-morph-background {
+  animation:
+    shape-morph-a 12.8s ease-in-out -4.8s infinite,
+    shape-morph-b 16.2s ease-in-out -11.1s infinite;
 }
 
-.slow-drift-background .gradient-blob--b {
-  animation: slow-drift-b 36s ease-in-out -18s infinite alternate;
-}
-
-.drift-breathing-background .gradient-blob--a {
-  animation: drift-breathe-a 31s ease-in-out -11s infinite alternate;
-}
-
-.drift-breathing-background .gradient-blob--b {
-  animation: drift-breathe-b 38s ease-in-out -21s infinite alternate;
-}
-
-@keyframes breathe-a {
+@keyframes strong-breathe-a {
   0%,
   100% {
-    opacity: 0.78;
-    transform: translate(-50%, -50%) scale(0.94);
+    --a-rx: 29vw;
+    --a-ry: 21vw;
+    --a-alpha: 0.27;
   }
   50% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.08);
+    --a-rx: 57vw;
+    --a-ry: 43vw;
+    --a-alpha: 0.5;
   }
 }
 
-@keyframes breathe-b {
+@keyframes strong-breathe-b {
   0%,
   100% {
-    opacity: 0.76;
-    transform: translate(-50%, -50%) scale(0.92);
+    --b-rx: 25vw;
+    --b-ry: 20vw;
+    --b-alpha: 0.24;
   }
   52% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.07);
+    --b-rx: 52vw;
+    --b-ry: 41vw;
+    --b-alpha: 0.46;
   }
 }
 
-@keyframes fade-relocate-a {
+@keyframes shape-morph-a {
   0%,
   100% {
-    opacity: 0.06;
-    transform: translate(-50%, -50%) scale(0.92);
+    --a-x: 68%;
+    --a-y: 24%;
+    --a-rx: 60vw;
+    --a-ry: 19vw;
+    --a-alpha: 0.4;
   }
-  18%,
-  68% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  82% {
-    opacity: 0.7;
-  }
-}
-
-@keyframes fade-relocate-b {
-  0%,
-  100% {
-    opacity: 0.06;
-    transform: translate(-50%, -50%) scale(0.9);
-  }
-  22%,
-  72% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.02);
-  }
-  86% {
-    opacity: 0.62;
-  }
-}
-
-@keyframes slow-drift-a {
-  0% {
-    transform: translate(-50%, -50%) translate3d(-10vw, 4vh, 0);
-  }
-  34% {
-    transform: translate(-50%, -50%) translate3d(7vw, 11vh, 0);
-  }
-  68% {
-    transform: translate(-50%, -50%) translate3d(13vw, -8vh, 0);
-  }
-  100% {
-    transform: translate(-50%, -50%) translate3d(-4vw, -12vh, 0);
-  }
-}
-
-@keyframes slow-drift-b {
-  0% {
-    transform: translate(-50%, -50%) translate3d(8vw, -7vh, 0);
-  }
-  31% {
-    transform: translate(-50%, -50%) translate3d(-9vw, -12vh, 0);
+  32% {
+    --a-x: 62%;
+    --a-y: 31%;
+    --a-rx: 27vw;
+    --a-ry: 49vw;
+    --a-alpha: 0.44;
   }
   66% {
-    transform: translate(-50%, -50%) translate3d(-13vw, 7vh, 0);
-  }
-  100% {
-    transform: translate(-50%, -50%) translate3d(6vw, 11vh, 0);
-  }
-}
-
-@keyframes drift-breathe-a {
-  0% {
-    opacity: 0.78;
-    transform: translate(-50%, -50%) translate3d(-8vw, 5vh, 0) scale(0.92);
-  }
-  36% {
-    opacity: 1;
-    transform: translate(-50%, -50%) translate3d(8vw, 12vh, 0) scale(1.08);
-  }
-  72% {
-    opacity: 0.86;
-    transform: translate(-50%, -50%) translate3d(14vw, -6vh, 0) scale(0.98);
-  }
-  100% {
-    opacity: 0.95;
-    transform: translate(-50%, -50%) translate3d(-3vw, -11vh, 0) scale(1.05);
+    --a-x: 74%;
+    --a-y: 28%;
+    --a-rx: 39vw;
+    --a-ry: 36vw;
+    --a-alpha: 0.37;
   }
 }
 
-@keyframes drift-breathe-b {
-  0% {
-    opacity: 0.82;
-    transform: translate(-50%, -50%) translate3d(7vw, -9vh, 0) scale(1.04);
-  }
-  33% {
-    opacity: 0.92;
-    transform: translate(-50%, -50%) translate3d(-10vw, -12vh, 0) scale(0.94);
-  }
-  69% {
-    opacity: 1;
-    transform: translate(-50%, -50%) translate3d(-14vw, 6vh, 0) scale(1.09);
-  }
+@keyframes shape-morph-b {
+  0%,
   100% {
-    opacity: 0.8;
-    transform: translate(-50%, -50%) translate3d(5vw, 12vh, 0) scale(0.96);
+    --b-x: 24%;
+    --b-y: 73%;
+    --b-rx: 23vw;
+    --b-ry: 48vw;
+    --b-alpha: 0.36;
+  }
+  35% {
+    --b-x: 31%;
+    --b-y: 66%;
+    --b-rx: 56vw;
+    --b-ry: 18vw;
+    --b-alpha: 0.42;
+  }
+  70% {
+    --b-x: 20%;
+    --b-y: 78%;
+    --b-rx: 37vw;
+    --b-ry: 34vw;
+    --b-alpha: 0.33;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animated-background .gradient-blob {
+  .animated-background {
     animation: none;
-    transform: translate(-50%, -50%);
+    transition: none;
   }
 }
 
