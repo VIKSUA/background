@@ -91,7 +91,10 @@ function FadeRelocateBackground() {
     ]
     const timers: number[] = []
     const targetAlpha: [number, number] = [0.42, 0.38]
-    const fadeMs = 4200
+    const fadeInMs = 4200
+    const fadeOutMs = 1100
+    const nextStartMs = 2750
+    const hasAppeared = [false, false]
 
     const schedule = (callback: () => void, delay: number) => {
       const timer = window.setTimeout(callback, delay)
@@ -102,35 +105,55 @@ function FadeRelocateBackground() {
       element.style.setProperty(index === 0 ? '--a-alpha' : '--b-alpha', String(value))
     }
 
+    const setAlphaDuration = (index: 0 | 1, duration: number) => {
+      element.style.setProperty(
+        index === 0 ? '--a-alpha-duration' : '--b-alpha-duration',
+        `${duration}ms`,
+      )
+    }
+
     const setPosition = (index: 0 | 1, position: BlobPosition) => {
       element.style.setProperty(index === 0 ? '--a-x' : '--b-x', `${position.x}%`)
       element.style.setProperty(index === 0 ? '--a-y' : '--b-y', `${position.y}%`)
     }
 
-    const runCrossfade = (from: 0 | 1, to: 0 | 1) => {
-      const next = choosePosition(positions[to], positions[from], 48, 58)
-      positions[to] = next
-      setPosition(to, next)
-      setAlpha(to, 0)
+    const startAppearance = (index: 0 | 1, otherIndex: 0 | 1) => {
+      if (hasAppeared[index]) {
+        const next = choosePosition(positions[index], positions[otherIndex], 48, 58)
+        positions[index] = next
+        setPosition(index, next)
+      } else {
+        hasAppeared[index] = true
+      }
+
+      setAlphaDuration(index, 0)
+      setAlpha(index, 0)
 
       schedule(() => {
-        setAlpha(from, 0)
-        setAlpha(to, targetAlpha[to])
-      }, 80)
+        setAlphaDuration(index, fadeInMs)
+        setAlpha(index, targetAlpha[index])
+      }, 50)
 
       schedule(() => {
-        runCrossfade(to, from)
-      }, fadeMs + 140)
+        setAlphaDuration(index, fadeOutMs)
+        setAlpha(index, 0)
+      }, fadeInMs + 50)
+
+      schedule(() => {
+        startAppearance(otherIndex, index)
+      }, nextStartMs)
     }
 
     setPosition(0, positions[0])
     setPosition(1, positions[1])
-    setAlpha(0, targetAlpha[0])
+    setAlphaDuration(0, 0)
+    setAlphaDuration(1, 0)
+    setAlpha(0, 0)
     setAlpha(1, 0)
 
     schedule(() => {
-      runCrossfade(0, 1)
-    }, 600)
+      startAppearance(0, 1)
+    }, 80)
 
     return () => timers.forEach((timer) => window.clearTimeout(timer))
   }, [])
