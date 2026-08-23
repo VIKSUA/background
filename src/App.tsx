@@ -20,11 +20,6 @@ const examplePages: Array<{
   { label: 'Example 4', path: '/example-4', variant: 'shape-morph' },
 ]
 
-const initialBlobPositions: [BlobPosition, BlobPosition] = [
-  { x: 70, y: 22 },
-  { x: 22, y: 72 },
-]
-
 function MenuIcon() {
   return (
     <span className="menu-icon" aria-hidden="true">
