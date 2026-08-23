@@ -118,8 +118,8 @@
   --b-ry: 21vw;
 
   transition:
-    --a-alpha 3.6s ease-in-out,
-    --b-alpha 4.4s ease-in-out;
+    --a-alpha 4.2s ease-in-out,
+    --b-alpha 4.2s ease-in-out;
 }
 
 .strong-breathing-background {
