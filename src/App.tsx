@@ -90,8 +90,8 @@ function FadeRelocateBackground() {
       { x: 20, y: 76 },
     ]
     const timers: number[] = []
-    const alpha = [0.42, 0.38]
-    const fadeMs = [3600, 4400]
+    const targetAlpha: [number, number] = [0.42, 0.38]
+    const fadeMs = 4200
 
     const schedule = (callback: () => void, delay: number) => {
       const timer = window.setTimeout(callback, delay)
@@ -107,33 +107,30 @@ function FadeRelocateBackground() {
       element.style.setProperty(index === 0 ? '--a-y' : '--b-y', `${position.y}%`)
     }
 
-    const beginCycle = (index: 0 | 1, delayBeforeFade: number) => {
+    const runCrossfade = (from: 0 | 1, to: 0 | 1) => {
+      const next = choosePosition(positions[to], positions[from], 48, 58)
+      positions[to] = next
+      setPosition(to, next)
+      setAlpha(to, 0)
+
       schedule(() => {
-        setAlpha(index, 0)
+        setAlpha(from, 0)
+        setAlpha(to, targetAlpha[to])
+      }, 80)
 
-        schedule(() => {
-          const otherIndex = index === 0 ? 1 : 0
-          const next = choosePosition(positions[index], positions[otherIndex], 30, 38)
-          positions[index] = next
-          setPosition(index, next)
-
-          schedule(() => {
-            setAlpha(index, alpha[index])
-            const hold = 4200 + Math.random() * 3200
-            beginCycle(index, fadeMs[index] + hold)
-          }, 120)
-        }, fadeMs[index])
-      }, delayBeforeFade)
+      schedule(() => {
+        runCrossfade(to, from)
+      }, fadeMs + 140)
     }
 
     setPosition(0, positions[0])
     setPosition(1, positions[1])
-    setAlpha(0, alpha[0])
-    setAlpha(1, 0.035)
+    setAlpha(0, targetAlpha[0])
+    setAlpha(1, 0)
 
-    schedule(() => setAlpha(1, alpha[1]), 120)
-    beginCycle(0, 900)
-    beginCycle(1, 7600)
+    schedule(() => {
+      runCrossfade(0, 1)
+    }, 600)
 
     return () => timers.forEach((timer) => window.clearTimeout(timer))
   }, [])
