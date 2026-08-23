@@ -112,10 +112,10 @@
 }
 
 .fade-relocate-background {
-  --a-rx: 30vw;
-  --a-ry: 23vw;
-  --b-rx: 27vw;
-  --b-ry: 21vw;
+  --a-rx: 42vw;
+  --a-ry: 32vw;
+  --b-rx: 42vw;
+  --b-ry: 32vw;
 
   transition:
     --a-alpha 4.2s ease-in-out,
@@ -129,6 +129,11 @@
 }
 
 .random-drift-background {
+  --a-rx: 42vw;
+  --a-ry: 32vw;
+  --b-rx: 42vw;
+  --b-ry: 32vw;
+
   transition:
     --a-x 10.5s ease-in-out,
     --a-y 10.5s ease-in-out,
@@ -145,13 +150,13 @@
 @keyframes strong-breathe-a {
   0%,
   100% {
-    --a-rx: 29vw;
-    --a-ry: 21vw;
+    --a-rx: 24vw;
+    --a-ry: 18vw;
     --a-alpha: 0.27;
   }
   50% {
-    --a-rx: 57vw;
-    --a-ry: 43vw;
+    --a-rx: 42vw;
+    --a-ry: 32vw;
     --a-alpha: 0.5;
   }
 }
@@ -159,13 +164,13 @@
 @keyframes strong-breathe-b {
   0%,
   100% {
-    --b-rx: 25vw;
-    --b-ry: 20vw;
+    --b-rx: 22vw;
+    --b-ry: 17vw;
     --b-alpha: 0.24;
   }
   52% {
-    --b-rx: 52vw;
-    --b-ry: 41vw;
+    --b-rx: 42vw;
+    --b-ry: 32vw;
     --b-alpha: 0.46;
   }
 }
@@ -175,15 +180,15 @@
   100% {
     --a-x: 68%;
     --a-y: 24%;
-    --a-rx: 60vw;
-    --a-ry: 19vw;
+    --a-rx: 42vw;
+    --a-ry: 13.3vw;
     --a-alpha: 0.4;
   }
   32% {
     --a-x: 62%;
     --a-y: 31%;
-    --a-rx: 27vw;
-    --a-ry: 49vw;
+    --a-rx: 23.1vw;
+    --a-ry: 42vw;
     --a-alpha: 0.44;
   }
   66% {
@@ -200,15 +205,15 @@
   100% {
     --b-x: 24%;
     --b-y: 73%;
-    --b-rx: 23vw;
-    --b-ry: 48vw;
+    --b-rx: 20.1vw;
+    --b-ry: 42vw;
     --b-alpha: 0.36;
   }
   35% {
     --b-x: 31%;
     --b-y: 66%;
-    --b-rx: 56vw;
-    --b-ry: 18vw;
+    --b-rx: 42vw;
+    --b-ry: 13.5vw;
     --b-alpha: 0.42;
   }
   70% {
