@@ -112,6 +112,11 @@
 }
 
 .fade-relocate-background {
+  --a-rx: 30vw;
+  --a-ry: 23vw;
+  --b-rx: 27vw;
+  --b-ry: 21vw;
+
   transition:
     --a-alpha 3.6s ease-in-out,
     --b-alpha 4.4s ease-in-out;
