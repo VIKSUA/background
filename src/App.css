@@ -124,8 +124,8 @@
   --b-alpha: 0;
 
   animation:
-    fade-relocate-a 10s ease-in-out infinite,
-    fade-relocate-b 10s ease-in-out 5s infinite;
+    fade-relocate-a 10s linear infinite,
+    fade-relocate-b 10s linear 5s infinite;
 }
 
 @keyframes fade-relocate-a {
