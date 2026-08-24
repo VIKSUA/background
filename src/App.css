@@ -135,6 +135,7 @@
   }
   50% {
     --a-alpha: 0.42;
+    animation-timing-function: ease-in;
   }
   80% {
     --a-alpha: 0;
@@ -148,6 +149,7 @@
   }
   50% {
     --b-alpha: 0.38;
+    animation-timing-function: ease-in;
   }
   80% {
     --b-alpha: 0;
