@@ -112,18 +112,46 @@
 }
 
 .fade-relocate-background {
+  --a-x: 72%;
+  --a-y: 24%;
+  --b-x: 20%;
+  --b-y: 76%;
   --a-rx: 42vw;
   --a-ry: 32vw;
   --b-rx: 42vw;
   --b-ry: 32vw;
   --a-alpha: 0;
   --b-alpha: 0;
-  --a-alpha-duration: 4.2s;
-  --b-alpha-duration: 4.2s;
 
-  transition:
-    --a-alpha var(--a-alpha-duration) ease-in-out,
-    --b-alpha var(--b-alpha-duration) ease-in-out;
+  animation:
+    fade-relocate-a 10s ease-in-out infinite,
+    fade-relocate-b 10s ease-in-out 5s infinite;
+}
+
+@keyframes fade-relocate-a {
+  0%,
+  100% {
+    --a-alpha: 0;
+  }
+  50% {
+    --a-alpha: 0.42;
+  }
+  70% {
+    --a-alpha: 0;
+  }
+}
+
+@keyframes fade-relocate-b {
+  0%,
+  100% {
+    --b-alpha: 0;
+  }
+  50% {
+    --b-alpha: 0.38;
+  }
+  70% {
+    --b-alpha: 0;
+  }
 }
 
 .strong-breathing-background {

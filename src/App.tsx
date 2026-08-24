@@ -89,73 +89,28 @@ function FadeRelocateBackground() {
       { x: 72, y: 24 },
       { x: 20, y: 76 },
     ]
-    const timers: number[] = []
-    const targetAlpha: [number, number] = [0.42, 0.38]
-    const fadeInMs = 4200
-    const fadeOutMs = 1100
-    const nextStartMs = 2750
-    const hasAppeared = [false, false]
-
-    const schedule = (callback: () => void, delay: number) => {
-      const timer = window.setTimeout(callback, delay)
-      timers.push(timer)
-    }
-
-    const setAlpha = (index: 0 | 1, value: number) => {
-      element.style.setProperty(index === 0 ? '--a-alpha' : '--b-alpha', String(value))
-    }
-
-    const setAlphaDuration = (index: 0 | 1, duration: number) => {
-      element.style.setProperty(
-        index === 0 ? '--a-alpha-duration' : '--b-alpha-duration',
-        `${duration}ms`,
-      )
-    }
 
     const setPosition = (index: 0 | 1, position: BlobPosition) => {
       element.style.setProperty(index === 0 ? '--a-x' : '--b-x', `${position.x}%`)
       element.style.setProperty(index === 0 ? '--a-y' : '--b-y', `${position.y}%`)
     }
 
-    const startAppearance = (index: 0 | 1, otherIndex: 0 | 1) => {
-      if (hasAppeared[index]) {
-        const next = choosePosition(positions[index], positions[otherIndex], 48, 58)
-        positions[index] = next
-        setPosition(index, next)
-      } else {
-        hasAppeared[index] = true
-      }
-
-      setAlphaDuration(index, 0)
-      setAlpha(index, 0)
-
-      schedule(() => {
-        setAlphaDuration(index, fadeInMs)
-        setAlpha(index, targetAlpha[index])
-      }, 50)
-
-      schedule(() => {
-        setAlphaDuration(index, fadeOutMs)
-        setAlpha(index, 0)
-      }, fadeInMs + 50)
-
-      schedule(() => {
-        startAppearance(otherIndex, index)
-      }, nextStartMs)
+    const relocate = (index: 0 | 1, otherIndex: 0 | 1) => {
+      const next = choosePosition(positions[index], positions[otherIndex], 48, 58)
+      positions[index] = next
+      setPosition(index, next)
     }
 
-    setPosition(0, positions[0])
-    setPosition(1, positions[1])
-    setAlphaDuration(0, 0)
-    setAlphaDuration(1, 0)
-    setAlpha(0, 0)
-    setAlpha(1, 0)
+    const handleIteration = (event: AnimationEvent) => {
+      if (event.animationName === 'fade-relocate-a') {
+        relocate(0, 1)
+      } else if (event.animationName === 'fade-relocate-b') {
+        relocate(1, 0)
+      }
+    }
 
-    schedule(() => {
-      startAppearance(0, 1)
-    }, 80)
-
-    return () => timers.forEach((timer) => window.clearTimeout(timer))
+    element.addEventListener('animationiteration', handleIteration)
+    return () => element.removeEventListener('animationiteration', handleIteration)
   }, [])
 
   return <div ref={backgroundRef} className="example-page animated-background fade-relocate-background" />
