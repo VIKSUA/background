@@ -129,18 +129,29 @@
 }
 
 .soft-fade-relocate-background {
+  --a-rx: 34vw;
+  --a-ry: 26vw;
+  --b-rx: 34vw;
+  --b-ry: 26vw;
+
   background-image:
     radial-gradient(
       ellipse var(--a-rx) var(--a-ry) at var(--a-x) var(--a-y),
-      rgb(83 245 126 / var(--a-alpha)) 0%,
-      rgb(83 245 126 / var(--a-alpha)) 28%,
-      transparent 74%
+      rgb(83 245 126 / calc(var(--a-alpha) * 0.72)) 0%,
+      rgb(83 245 126 / calc(var(--a-alpha) * 0.78)) 12%,
+      rgb(83 245 126 / calc(var(--a-alpha) * 0.68)) 28%,
+      rgb(83 245 126 / calc(var(--a-alpha) * 0.46)) 48%,
+      rgb(83 245 126 / calc(var(--a-alpha) * 0.2)) 66%,
+      transparent 82%
     ),
     radial-gradient(
       ellipse var(--b-rx) var(--b-ry) at var(--b-x) var(--b-y),
-      rgb(83 245 126 / var(--b-alpha)) 0%,
-      rgb(83 245 126 / var(--b-alpha)) 28%,
-      transparent 74%
+      rgb(83 245 126 / calc(var(--b-alpha) * 0.72)) 0%,
+      rgb(83 245 126 / calc(var(--b-alpha) * 0.78)) 12%,
+      rgb(83 245 126 / calc(var(--b-alpha) * 0.68)) 28%,
+      rgb(83 245 126 / calc(var(--b-alpha) * 0.46)) 48%,
+      rgb(83 245 126 / calc(var(--b-alpha) * 0.2)) 66%,
+      transparent 82%
     );
 
   animation:
