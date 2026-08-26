@@ -2,7 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import './App.css'
 
-type BackgroundVariant = 'fade-relocate' | 'strong-breathing' | 'random-drift' | 'shape-morph'
+type BackgroundVariant =
+  | 'fade-relocate'
+  | 'strong-breathing'
+  | 'random-drift'
+  | 'shape-morph'
+  | 'soft-fade-relocate'
+  | 'soft-fade-relocate-noise'
 
 type BlobPosition = {
   x: number
@@ -18,6 +24,8 @@ const examplePages: Array<{
   { label: 'Example 2', path: '/example-2', variant: 'strong-breathing' },
   { label: 'Example 3', path: '/example-3', variant: 'random-drift' },
   { label: 'Example 4', path: '/example-4', variant: 'shape-morph' },
+  { label: 'Example 5', path: '/example-5', variant: 'soft-fade-relocate' },
+  { label: 'Example 6', path: '/example-6', variant: 'soft-fade-relocate-noise' },
 ]
 
 function MenuIcon() {
@@ -78,7 +86,7 @@ function choosePosition(
   )
 }
 
-function FadeRelocateBackground() {
+function FadeRelocateBackground({ className = '' }: { className?: string }) {
   const backgroundRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -113,7 +121,12 @@ function FadeRelocateBackground() {
     return () => element.removeEventListener('animationiteration', handleIteration)
   }, [])
 
-  return <div ref={backgroundRef} className="example-page animated-background fade-relocate-background" />
+  return (
+    <div
+      ref={backgroundRef}
+      className={`example-page animated-background fade-relocate-background ${className}`.trim()}
+    />
+  )
 }
 
 function RandomDriftBackground() {
@@ -161,6 +174,14 @@ function RandomDriftBackground() {
 function ExamplePage({ variant }: { variant: BackgroundVariant }) {
   if (variant === 'fade-relocate') {
     return <FadeRelocateBackground />
+  }
+
+  if (variant === 'soft-fade-relocate') {
+    return <FadeRelocateBackground className="soft-fade-relocate-background" />
+  }
+
+  if (variant === 'soft-fade-relocate-noise') {
+    return <FadeRelocateBackground className="soft-fade-relocate-background noise-overlay-background" />
   }
 
   if (variant === 'random-drift') {
