@@ -129,6 +129,49 @@ function FadeRelocateBackground({ className = '' }: { className?: string }) {
   )
 }
 
+function SoftFadeRelocateBackground() {
+  const backgroundRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const element = backgroundRef.current
+    if (!element) return
+
+    const positions: [BlobPosition, BlobPosition] = [
+      { x: 72, y: 24 },
+      { x: 20, y: 76 },
+    ]
+
+    const setPosition = (index: 0 | 1, position: BlobPosition) => {
+      element.style.setProperty(index === 0 ? '--a-x' : '--b-x', `${position.x}%`)
+      element.style.setProperty(index === 0 ? '--a-y' : '--b-y', `${position.y}%`)
+    }
+
+    const relocate = (index: 0 | 1, otherIndex: 0 | 1) => {
+      const next = choosePosition(positions[index], positions[otherIndex], 48, 58)
+      positions[index] = next
+      setPosition(index, next)
+    }
+
+    const handleIteration = (event: AnimationEvent) => {
+      if (event.animationName === 'soft-fade-relocate-a') {
+        relocate(0, 1)
+      } else if (event.animationName === 'soft-fade-relocate-b') {
+        relocate(1, 0)
+      }
+    }
+
+    element.addEventListener('animationiteration', handleIteration)
+    return () => element.removeEventListener('animationiteration', handleIteration)
+  }, [])
+
+  return (
+    <div
+      ref={backgroundRef}
+      className="example-page animated-background fade-relocate-background soft-fade-relocate-background"
+    />
+  )
+}
+
 function RandomDriftBackground() {
   const backgroundRef = useRef<HTMLDivElement>(null)
 
@@ -177,7 +220,7 @@ function ExamplePage({ variant }: { variant: BackgroundVariant }) {
   }
 
   if (variant === 'soft-fade-relocate') {
-    return <FadeRelocateBackground className="soft-fade-relocate-background" />
+    return <SoftFadeRelocateBackground />
   }
 
   if (variant === 'soft-fade-relocate-noise') {
