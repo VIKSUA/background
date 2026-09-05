@@ -128,6 +128,20 @@
     fade-relocate-b 10s linear 5s infinite;
 }
 
+.fade-relocate-background.texture-overlay-background {
+  background-image:
+    radial-gradient(
+      ellipse var(--a-rx) var(--a-ry) at var(--a-x) var(--a-y),
+      rgb(83 245 126 / var(--a-alpha)),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse var(--b-rx) var(--b-ry) at var(--b-x) var(--b-y),
+      rgb(236 158 33 / var(--b-alpha)),
+      transparent 72%
+    );
+}
+
 .texture-overlay-background::after {
   content: '';
   position: absolute;
