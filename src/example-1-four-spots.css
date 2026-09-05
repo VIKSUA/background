@@ -1,0 +1,152 @@
+@property --c-alpha {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --d-alpha {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+.example-page.example-one-four-spots.texture-overlay-background {
+  --a-x: 72%;
+  --a-y: 24%;
+  --b-x: 22%;
+  --b-y: 76%;
+  --c-x: 16%;
+  --c-y: 40%;
+  --d-x: 82%;
+  --d-y: 62%;
+
+  --a-rx: 42vmax;
+  --a-ry: 32vmax;
+  --b-rx: 42vmax;
+  --b-ry: 32vmax;
+  --c-rx: 42vmax;
+  --c-ry: 32vmax;
+  --d-rx: 42vmax;
+  --d-ry: 32vmax;
+
+  --a-alpha: 0;
+  --b-alpha: 0;
+  --c-alpha: 0;
+  --d-alpha: 0;
+
+  background-image:
+    radial-gradient(
+      ellipse var(--a-rx) var(--a-ry) at var(--a-x) var(--a-y),
+      rgb(83 245 126 / var(--a-alpha)),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse var(--b-rx) var(--b-ry) at var(--b-x) var(--b-y),
+      rgb(236 158 33 / var(--b-alpha)),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse var(--c-rx) var(--c-ry) at var(--c-x) var(--c-y),
+      rgb(83 245 126 / var(--c-alpha)),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse var(--d-rx) var(--d-ry) at var(--d-x) var(--d-y),
+      rgb(236 158 33 / var(--d-alpha)),
+      transparent 72%
+    );
+
+  animation:
+    example-one-a 16s linear 0s infinite,
+    example-one-b 16s linear -4s infinite,
+    example-one-c 16s linear -8s infinite,
+    example-one-d 16s linear -12s infinite;
+}
+
+@keyframes example-one-a {
+  0%,
+  100% {
+    --a-alpha: 0;
+  }
+  12% {
+    --a-alpha: 0.12;
+  }
+  30% {
+    --a-alpha: 0.42;
+  }
+  55% {
+    --a-alpha: 0.3;
+  }
+  72% {
+    --a-alpha: 0.12;
+  }
+  88% {
+    --a-alpha: 0;
+  }
+}
+
+@keyframes example-one-b {
+  0%,
+  100% {
+    --b-alpha: 0;
+  }
+  12% {
+    --b-alpha: 0.1;
+  }
+  30% {
+    --b-alpha: 0.38;
+  }
+  55% {
+    --b-alpha: 0.27;
+  }
+  72% {
+    --b-alpha: 0.1;
+  }
+  88% {
+    --b-alpha: 0;
+  }
+}
+
+@keyframes example-one-c {
+  0%,
+  100% {
+    --c-alpha: 0;
+  }
+  12% {
+    --c-alpha: 0.12;
+  }
+  30% {
+    --c-alpha: 0.42;
+  }
+  55% {
+    --c-alpha: 0.3;
+  }
+  72% {
+    --c-alpha: 0.12;
+  }
+  88% {
+    --c-alpha: 0;
+  }
+}
+
+@keyframes example-one-d {
+  0%,
+  100% {
+    --d-alpha: 0;
+  }
+  12% {
+    --d-alpha: 0.1;
+  }
+  30% {
+    --d-alpha: 0.38;
+  }
+  55% {
+    --d-alpha: 0.27;
+  }
+  72% {
+    --d-alpha: 0.1;
+  }
+  88% {
+    --d-alpha: 0;
+  }
+}
