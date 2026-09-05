@@ -216,7 +216,7 @@ function RandomDriftBackground() {
 
 function ExamplePage({ variant }: { variant: BackgroundVariant }) {
   if (variant === 'fade-relocate') {
-    return <FadeRelocateBackground />
+    return <FadeRelocateBackground className="texture-overlay-background" />
   }
 
   if (variant === 'soft-fade-relocate') {
