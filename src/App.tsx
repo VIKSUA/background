@@ -94,10 +94,10 @@ function ExampleOneBackground() {
     if (!element) return
 
     const positions: BlobPosition[] = [
-      { x: 72, y: 24 },
-      { x: 22, y: 76 },
-      { x: 16, y: 40 },
-      { x: 82, y: 62 },
+      { x: 24, y: 24 },
+      { x: 80, y: 28 },
+      { x: 78, y: 72 },
+      { x: 20, y: 70 },
     ]
     const variableNames = ['a', 'b', 'c', 'd'] as const
 
@@ -109,36 +109,51 @@ function ExampleOneBackground() {
 
     const chooseNextPosition = (index: number) => {
       const previous = positions[index]
-      const others = positions.filter((_, positionIndex) => positionIndex !== index)
+      const sameColor = positions[(index + 2) % 4]
+      const otherColors = positions.filter(
+        (_, positionIndex) => positionIndex !== index && positionIndex !== (index + 2) % 4,
+      )
+      const toLeft = sameColor.x >= 50
+      const toTop = sameColor.y >= 50
+      const xMin = toLeft ? 6 : 52
+      const xMax = toLeft ? 48 : 94
+      const yMin = toTop ? 6 : 52
+      const yMax = toTop ? 48 : 94
 
-      for (let attempt = 0; attempt < 60; attempt += 1) {
-        const candidate = randomPosition(6, 94)
-        const farEnoughFromPrevious = distance(candidate, previous) >= 38
-        const farEnoughFromOthers = others.every((other) => distance(candidate, other) >= 26)
+      const isUsable = (candidate: BlobPosition) =>
+        distance(candidate, previous) >= 16 &&
+        distance(candidate, sameColor) >= 52 &&
+        otherColors.every((other) => distance(candidate, other) >= 36)
 
-        if (farEnoughFromPrevious && farEnoughFromOthers) {
+      for (let attempt = 0; attempt < 80; attempt += 1) {
+        const candidate = {
+          x: xMin + Math.random() * (xMax - xMin),
+          y: yMin + Math.random() * (yMax - yMin),
+        }
+
+        if (isUsable(candidate)) {
           return candidate
         }
       }
 
-      const fallbackPositions: BlobPosition[] = [
-        { x: 12, y: 14 },
-        { x: 88, y: 16 },
-        { x: 14, y: 86 },
-        { x: 86, y: 84 },
-        { x: 50, y: 10 },
-        { x: 50, y: 90 },
-        { x: 10, y: 50 },
-        { x: 90, y: 50 },
+      const fallbacks: BlobPosition[] = [
+        { x: toLeft ? 14 : 86, y: toTop ? 14 : 86 },
+        { x: toLeft ? 14 : 86, y: toTop ? 34 : 66 },
+        { x: toLeft ? 34 : 66, y: toTop ? 14 : 86 },
+        { x: toLeft ? 22 : 78, y: toTop ? 22 : 78 },
       ]
 
-      return (
-        fallbackPositions.find(
-          (candidate) =>
-            distance(candidate, previous) >= 38 &&
-            others.every((other) => distance(candidate, other) >= 26),
-        ) ?? fallbackPositions[0]
-      )
+      return fallbacks.reduce((best, candidate) => {
+        const score = Math.min(
+          distance(candidate, sameColor),
+          ...otherColors.map((other) => distance(candidate, other)),
+        )
+        const bestScore = Math.min(
+          distance(best, sameColor),
+          ...otherColors.map((other) => distance(best, other)),
+        )
+        return score > bestScore ? candidate : best
+      })
     }
 
     const relocate = (index: number) => {

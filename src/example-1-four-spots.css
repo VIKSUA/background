@@ -11,14 +11,14 @@
 }
 
 .example-page.example-one-four-spots.texture-overlay-background {
-  --a-x: 72%;
+  --a-x: 24%;
   --a-y: 24%;
-  --b-x: 22%;
-  --b-y: 76%;
-  --c-x: 16%;
-  --c-y: 40%;
-  --d-x: 82%;
-  --d-y: 62%;
+  --b-x: 80%;
+  --b-y: 28%;
+  --c-x: 78%;
+  --c-y: 72%;
+  --d-x: 20%;
+  --d-y: 70%;
 
   --a-rx: 42vmax;
   --a-ry: 32vmax;
@@ -57,10 +57,10 @@
     );
 
   animation:
-    example-one-a 16s linear 0s infinite,
-    example-one-b 16s linear -4s infinite,
-    example-one-c 16s linear -8s infinite,
-    example-one-d 16s linear -12s infinite;
+    example-one-a 16s linear -4.8s infinite,
+    example-one-b 16s linear -8.8s infinite,
+    example-one-c 16s linear -12.8s infinite,
+    example-one-d 16s linear -0.8s infinite;
 }
 
 @keyframes example-one-a {
@@ -68,19 +68,25 @@
   100% {
     --a-alpha: 0;
   }
-  12% {
-    --a-alpha: 0.12;
+  3% {
+    --a-alpha: 0.15;
+  }
+  16% {
+    --a-alpha: 0.24;
   }
   30% {
-    --a-alpha: 0.42;
+    --a-alpha: 0.34;
   }
-  55% {
-    --a-alpha: 0.3;
+  50% {
+    --a-alpha: 0.27;
   }
-  72% {
-    --a-alpha: 0.12;
+  68% {
+    --a-alpha: 0.2;
   }
-  88% {
+  82% {
+    --a-alpha: 0.16;
+  }
+  96% {
     --a-alpha: 0;
   }
 }
@@ -90,19 +96,25 @@
   100% {
     --b-alpha: 0;
   }
-  12% {
-    --b-alpha: 0.1;
+  3% {
+    --b-alpha: 0.14;
+  }
+  16% {
+    --b-alpha: 0.25;
   }
   30% {
     --b-alpha: 0.38;
   }
-  55% {
-    --b-alpha: 0.27;
+  50% {
+    --b-alpha: 0.3;
   }
-  72% {
-    --b-alpha: 0.1;
+  68% {
+    --b-alpha: 0.21;
   }
-  88% {
+  82% {
+    --b-alpha: 0.16;
+  }
+  96% {
     --b-alpha: 0;
   }
 }
@@ -112,19 +124,25 @@
   100% {
     --c-alpha: 0;
   }
-  12% {
-    --c-alpha: 0.12;
+  3% {
+    --c-alpha: 0.15;
+  }
+  16% {
+    --c-alpha: 0.24;
   }
   30% {
-    --c-alpha: 0.42;
+    --c-alpha: 0.34;
   }
-  55% {
-    --c-alpha: 0.3;
+  50% {
+    --c-alpha: 0.27;
   }
-  72% {
-    --c-alpha: 0.12;
+  68% {
+    --c-alpha: 0.2;
   }
-  88% {
+  82% {
+    --c-alpha: 0.16;
+  }
+  96% {
     --c-alpha: 0;
   }
 }
@@ -134,19 +152,25 @@
   100% {
     --d-alpha: 0;
   }
-  12% {
-    --d-alpha: 0.1;
+  3% {
+    --d-alpha: 0.14;
+  }
+  16% {
+    --d-alpha: 0.25;
   }
   30% {
     --d-alpha: 0.38;
   }
-  55% {
-    --d-alpha: 0.27;
+  50% {
+    --d-alpha: 0.3;
   }
-  72% {
-    --d-alpha: 0.1;
+  68% {
+    --d-alpha: 0.21;
   }
-  88% {
+  82% {
+    --d-alpha: 0.16;
+  }
+  96% {
     --d-alpha: 0;
   }
 }
