@@ -1,0 +1,6 @@
+.example-page.fade-relocate-background.texture-overlay-background {
+  --a-rx: 42vmax;
+  --a-ry: 32vmax;
+  --b-rx: 42vmax;
+  --b-ry: 32vmax;
+}
