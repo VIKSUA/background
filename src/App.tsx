@@ -86,6 +86,91 @@ function choosePosition(
   )
 }
 
+function ExampleOneBackground() {
+  const backgroundRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const element = backgroundRef.current
+    if (!element) return
+
+    const positions: BlobPosition[] = [
+      { x: 72, y: 24 },
+      { x: 22, y: 76 },
+      { x: 16, y: 40 },
+      { x: 82, y: 62 },
+    ]
+    const variableNames = ['a', 'b', 'c', 'd'] as const
+
+    const setPosition = (index: number, position: BlobPosition) => {
+      const variableName = variableNames[index]
+      element.style.setProperty(`--${variableName}-x`, `${position.x}%`)
+      element.style.setProperty(`--${variableName}-y`, `${position.y}%`)
+    }
+
+    const chooseNextPosition = (index: number) => {
+      const previous = positions[index]
+      const others = positions.filter((_, positionIndex) => positionIndex !== index)
+
+      for (let attempt = 0; attempt < 60; attempt += 1) {
+        const candidate = randomPosition(6, 94)
+        const farEnoughFromPrevious = distance(candidate, previous) >= 38
+        const farEnoughFromOthers = others.every((other) => distance(candidate, other) >= 26)
+
+        if (farEnoughFromPrevious && farEnoughFromOthers) {
+          return candidate
+        }
+      }
+
+      const fallbackPositions: BlobPosition[] = [
+        { x: 12, y: 14 },
+        { x: 88, y: 16 },
+        { x: 14, y: 86 },
+        { x: 86, y: 84 },
+        { x: 50, y: 10 },
+        { x: 50, y: 90 },
+        { x: 10, y: 50 },
+        { x: 90, y: 50 },
+      ]
+
+      return (
+        fallbackPositions.find(
+          (candidate) =>
+            distance(candidate, previous) >= 38 &&
+            others.every((other) => distance(candidate, other) >= 26),
+        ) ?? fallbackPositions[0]
+      )
+    }
+
+    const relocate = (index: number) => {
+      const next = chooseNextPosition(index)
+      positions[index] = next
+      setPosition(index, next)
+    }
+
+    const handleIteration = (event: AnimationEvent) => {
+      if (event.animationName === 'example-one-a') {
+        relocate(0)
+      } else if (event.animationName === 'example-one-b') {
+        relocate(1)
+      } else if (event.animationName === 'example-one-c') {
+        relocate(2)
+      } else if (event.animationName === 'example-one-d') {
+        relocate(3)
+      }
+    }
+
+    element.addEventListener('animationiteration', handleIteration)
+    return () => element.removeEventListener('animationiteration', handleIteration)
+  }, [])
+
+  return (
+    <div
+      ref={backgroundRef}
+      className="example-page animated-background example-one-four-spots texture-overlay-background"
+    />
+  )
+}
+
 function FadeRelocateBackground({ className = '' }: { className?: string }) {
   const backgroundRef = useRef<HTMLDivElement>(null)
 
@@ -216,7 +301,7 @@ function RandomDriftBackground() {
 
 function ExamplePage({ variant }: { variant: BackgroundVariant }) {
   if (variant === 'fade-relocate') {
-    return <FadeRelocateBackground className="texture-overlay-background" />
+    return <ExampleOneBackground />
   }
 
   if (variant === 'soft-fade-relocate') {
